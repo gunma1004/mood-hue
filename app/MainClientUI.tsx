@@ -196,20 +196,30 @@ export default function MainClientUI() {
     setShuffledShops(shops);
   }, []);
 
-  // 1단계: 시·도 변경 시 구와 동을 초기화
+  // 상단 헤더 지역 클릭 시: 해당 시도 선택 + 검색창으로 부드럽게 스크롤 이동
+  const scrollToSearchWithRegion = (regionKey: string) => {
+    setSelectedRegion(regionKey);
+    setSelectedDistrict("");
+    setSelectedDong("");
+
+    const target = document.getElementById("search-section");
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
   const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedRegion(e.target.value);
     setSelectedDistrict("");
     setSelectedDong("");
   };
 
-  // 2단계: 구·시 변경 시 동을 초기화
   const handleDistrictChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedDistrict(e.target.value);
     setSelectedDong("");
   };
 
-  // 🌟 1번 페이지 이동: 직접 키워드 (/[region]/[district])
+  // 1번 페이지(직접 키워드: /[region]/[district])
   const handleDirectSearch = () => {
     if (!selectedDistrict) {
       alert("원하시는 지역(구/시)을 먼저 선택해주세요!");
@@ -226,7 +236,7 @@ export default function MainClientUI() {
     window.location.href = targetUrl;
   };
 
-  // 🌟 2번 페이지 이동: 띄어쓰기 회피형 (/massage/[region]/[district])
+  // 2번 페이지(띄어쓰기 회피형: /massage/[region]/[district])
   const handleSpacedSearch = () => {
     if (!selectedDistrict) {
       alert("원하시는 지역(구/시)을 먼저 선택해주세요!");
@@ -243,11 +253,8 @@ export default function MainClientUI() {
     window.location.href = targetUrl;
   };
 
-  // 구/시 목록 추출
   const currentDistricts = regionData[selectedRegion]?.districts || {};
   const currentDistrictKeys = Object.keys(currentDistricts);
-
-  // 동 목록 추출
   const currentDongs = (selectedDistrict && currentDistricts[selectedDistrict]?.dongs) || [];
 
   return (
@@ -270,14 +277,40 @@ export default function MainClientUI() {
             </div>
           </Link>
           
-          <div className="flex items-center gap-2">
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-            </span>
-            <span className="text-xs px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-red-500/20 text-amber-300 border border-amber-500/30 font-bold shadow-inner">
-              🔥 24시 실시간 영업중
-            </span>
+          {/* 🌟 상단 깔끔한 서울 / 경기 / 인천 스크롤 네비게이션 버튼 */}
+          <div className="flex items-center gap-1.5 bg-black/60 p-1 rounded-2xl border border-white/10">
+            <button
+              onClick={() => scrollToSearchWithRegion("seoul")}
+              className={`text-xs font-black px-2.5 py-1 rounded-xl transition-all cursor-pointer ${
+                selectedRegion === "seoul"
+                  ? "bg-amber-500 text-black shadow-md"
+                  : "text-gray-300 hover:text-amber-400"
+              }`}
+            >
+              서울
+            </button>
+            <span className="text-gray-700 text-[10px]">|</span>
+            <button
+              onClick={() => scrollToSearchWithRegion("gyeonggi")}
+              className={`text-xs font-black px-2.5 py-1 rounded-xl transition-all cursor-pointer ${
+                selectedRegion === "gyeonggi"
+                  ? "bg-amber-500 text-black shadow-md"
+                  : "text-gray-300 hover:text-amber-400"
+              }`}
+            >
+              경기
+            </button>
+            <span className="text-gray-700 text-[10px]">|</span>
+            <button
+              onClick={() => scrollToSearchWithRegion("incheon")}
+              className={`text-xs font-black px-2.5 py-1 rounded-xl transition-all cursor-pointer ${
+                selectedRegion === "incheon"
+                  ? "bg-amber-500 text-black shadow-md"
+                  : "text-gray-300 hover:text-amber-400"
+              }`}
+            >
+              인천
+            </button>
           </div>
         </div>
       </header>
@@ -350,8 +383,8 @@ export default function MainClientUI() {
           </div>
         </section>
 
-        {/* 🌟 분리 이동 가능한 다중 시·구·동 검색 박스 */}
-        <section className="pt-6 border-t border-white/10">
+        {/* 🌟 스크롤 이동 앵커 타겟 (id="search-section") */}
+        <section id="search-section" className="pt-6 border-t border-white/10 scroll-mt-24">
           <div className="bg-gradient-to-b from-[#18181b] to-[#0f0f11] border-2 border-amber-500/40 p-6 rounded-3xl max-w-xl mx-auto shadow-[0_10px_30px_rgba(0,0,0,0.8)] text-left relative overflow-hidden">
             <div className="flex items-center justify-between mb-4">
               <label className="text-xs text-amber-400 font-black uppercase tracking-wider flex items-center gap-1.5">
@@ -420,9 +453,8 @@ export default function MainClientUI() {
                 </select>
               </div>
 
-              {/* 🌟 1번 & 2번 페이지 선택 이동 듀얼 버튼 */}
+              {/* 1번 & 2번 페이지 선택 이동 듀얼 버튼 */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
-                {/* 1번 페이지 이동 버튼 */}
                 <button 
                   onClick={handleDirectSearch}
                   className="w-full bg-[#1c1c20] hover:bg-[#25252b] text-amber-400 font-bold py-3.5 px-3 rounded-2xl text-xs border border-amber-500/30 hover:border-amber-500/60 transition-all cursor-pointer flex flex-col items-center justify-center gap-1 active:scale-95 shadow-md"
@@ -431,7 +463,6 @@ export default function MainClientUI() {
                   <span className="font-extrabold text-white text-xs">📍 1번: 지역 홈케어 보기</span>
                 </button>
 
-                {/* 2번 페이지 이동 버튼 */}
                 <button 
                   onClick={handleSpacedSearch}
                   className="w-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-400 hover:to-yellow-300 text-black font-black py-3.5 px-3 rounded-2xl text-xs transition-all shadow-[0_0_20px_rgba(245,158,11,0.3)] cursor-pointer flex flex-col items-center justify-center gap-1 active:scale-95"
@@ -442,7 +473,7 @@ export default function MainClientUI() {
               </div>
 
               <p className="text-[10px] text-gray-400 text-center pt-1">
-                * 1번(홈케어)과 2번(마사지) 페이지는 각각 별점 스키마와 최적화된 SEO 키워드가 적용되어 있습니다.
+                * 상단 헤더의 [서울/경기/인천]을 누르면 검색창으로 바로 이동합니다.
               </p>
             </div>
           </div>
