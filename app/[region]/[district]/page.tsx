@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import ClientTextMixer from "./ClientTextMixer";
+import ClientShopList from "./ClientShopList";
 
 interface PageProps {
   params: Promise<{
@@ -217,12 +218,10 @@ export default async function RegionalDetailPage({ params, searchParams }: PageP
     },
   ];
 
-  // 🌟 지역명 문자열 조합 기반으로 4.9~5.0점, 115~146건 사이로 자연스럽게 분산
   const charSum = (fullTitle + districtName).split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const ratingValue = (4.9 + (charSum % 2) * 0.1).toFixed(1);
   const reviewCount = String(115 + (charSum % 32));
 
-  // 🌟 검색엔진 리치 스니펫(별점/리뷰수) 지원 JSON-LD
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -259,13 +258,11 @@ export default async function RegionalDetailPage({ params, searchParams }: PageP
 
   return (
     <div className="bg-[#050505] text-gray-100 min-h-screen flex flex-col font-sans selection:bg-amber-500 selection:text-black">
-      {/* 검색엔진 구조화 데이터 수집 스크립트 */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* 상단 헤더 */}
       <header className="sticky top-0 z-50 bg-[#050505]/85 backdrop-blur-xl border-b border-amber-500/20 px-4 py-3.5 shadow-[0_4px_20px_rgba(245,158,11,0.1)]">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <Link href="/" className="flex items-center gap-3 group">
@@ -292,7 +289,6 @@ export default async function RegionalDetailPage({ params, searchParams }: PageP
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8 w-full flex-1 space-y-12">
-        {/* 상단 지역 대표 배너 */}
         <section className="relative rounded-3xl overflow-hidden border border-amber-500/30 shadow-[0_0_40px_rgba(245,158,11,0.15)]">
           <img
             src="/banner.jpg"
@@ -312,10 +308,9 @@ export default async function RegionalDetailPage({ params, searchParams }: PageP
           </div>
         </section>
 
-        {/* 클라이언트 사이드 키워드 인젝션 영역 */}
         <ClientTextMixer locationText={fullTitle} />
 
-        {/* 제휴업체 5개 카드리스트 */}
+        {/* 🌟 제휴업체 5개 카드리스트: ClientShopList 적용 (새로고침 시 실시간 랜덤 셔플) */}
         <section className="space-y-6">
           <div className="text-center">
             <p className="text-xs text-amber-400 font-bold tracking-widest uppercase">RECOMMENDED SHOPS</p>
@@ -324,45 +319,9 @@ export default async function RegionalDetailPage({ params, searchParams }: PageP
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {localShops.map((lShop) => (
-              <div
-                key={lShop.id}
-                className="bg-[#121214] border border-amber-500/20 hover:border-amber-500/60 rounded-2xl p-4 flex gap-4 items-center shadow-lg transition-all group relative"
-              >
-                <Link
-                  href={`/shop/${lShop.id}`}
-                  className="absolute inset-0 z-10"
-                  aria-label={`${lShop.name} 상세페이지 보기`}
-                />
-                <img
-                  src={lShop.image}
-                  alt={lShop.name}
-                  className="w-20 h-20 md:w-24 md:h-24 rounded-xl object-cover border border-white/10 group-hover:scale-105 transition-transform"
-                />
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-extrabold text-sm md:text-base text-white truncate group-hover:text-amber-400 transition-colors">
-                    {lShop.name}
-                  </h3>
-                  <p className="text-[11px] text-gray-400 mt-1 line-clamp-2">
-                    {lShop.desc}
-                  </p>
-                  <div className="mt-2.5 flex items-center justify-between">
-                    <span className="text-xs font-black text-amber-400">{lShop.price}</span>
-                    <a
-                      href={`tel:${lShop.phone}`}
-                      className="bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black font-black text-xs px-3.5 py-1.5 rounded-xl shadow transition-all transform active:scale-95 relative z-20"
-                    >
-                      전화연결
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <ClientShopList initialShops={localShops} />
         </section>
 
-        {/* 건강 칼럼 섹션 */}
         <section className="bg-[#0c0c0e] p-6 md:p-8 rounded-3xl border border-white/10 space-y-4">
           <h3 className="text-base md:text-lg font-bold text-amber-400 flex items-center gap-2">
             <span>🌿</span> {fullTitle} 힐링 바디케어 & 스트레칭 건강 가이드
@@ -391,7 +350,6 @@ export default async function RegionalDetailPage({ params, searchParams }: PageP
           </div>
         </section>
 
-        {/* 이용 방법 4단계 */}
         <section className="bg-[#0f0f12] p-6 md:p-8 rounded-3xl border border-amber-500/30 space-y-6">
           <div className="text-center">
             <span className="text-amber-400 text-xs font-bold tracking-widest uppercase">SERVICE PROCESS</span>
@@ -421,7 +379,6 @@ export default async function RegionalDetailPage({ params, searchParams }: PageP
           </div>
         </section>
 
-        {/* 자주 묻는 질문 (Q&A) */}
         <section className="space-y-4">
           <div className="text-center">
             <span className="text-amber-400 text-xs font-bold tracking-widest uppercase">FAQ & GUIDE</span>
@@ -448,7 +405,6 @@ export default async function RegionalDetailPage({ params, searchParams }: PageP
         </section>
       </main>
 
-      {/* 푸터 영역 */}
       <footer className="bg-[#030303] border-t border-white/10 py-10 text-center text-gray-500 text-xs mt-auto">
         <div className="max-w-4xl mx-auto px-4 space-y-4">
           <div>

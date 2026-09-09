@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import ClientTextMixer from "@/app/[region]/[district]/ClientTextMixer";
+import ClientShopList from "@/app/[region]/[district]/ClientShopList";
 
 interface PageProps {
   params: Promise<{
@@ -24,13 +25,11 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   const locationKeyword = `${regionName} ${districtName} ${dongName}`.trim();
   const simpleLocation = dongName ? `${districtName} ${dongName}` : districtName;
 
-  // 30개 인덱스로 분기
   const charSum = (locationKeyword + dongName + districtName)
     .split("")
     .reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const variantIndex = charSum % 30;
 
-  // 💡 띄어쓰기 형태 30종 타이틀
   const spacedTitles = [
     /* 0 */ `${locationKeyword} 출장 타이 마사지 추천 | 24시 방문 케어 - 무드앤휴`,
     /* 1 */ `[무드앤휴] ${locationKeyword} 출장 아로마 마사지 안내 · 후불 안심제`,
@@ -64,7 +63,6 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
     /* 29 */ `[24시 신속] ${locationKeyword} 출장 전신 마사지 힐링 테라피 정보 안내`,
   ];
 
-  // 💡 네이버 80자 규격 엄수 30종 설명문 (공백 포함 50~65자)
   const spacedDescriptions = [
     /* 0 */ `${locationKeyword} 출장 타이 마사지 25분 내 빠른 방문! 선입금 없는 100% 안심 후불제 힐링 안내.`,
     /* 1 */ `프라이빗 피로회복! ${locationKeyword} 출장 아로마 마사지 가이드. 베테랑 힐러의 맞춤 테라피.`,
@@ -105,42 +103,31 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
     title,
     description,
     keywords: [
-      /* 기본 인기 코스 조합 */
       `${locationKeyword} 출장 타이 마사지`,
       `${locationKeyword} 출장 아로마 마사지`,
       `${locationKeyword} 출장 스웨디시 마사지`,
       `${locationKeyword} 출장 힐링 마사지`,
       `${simpleLocation} 출장 홈케어 마사지`,
-
-      /* 케어 부위 및 기법 조합 */
       `${locationKeyword} 출장 바디 마사지`,
       `${locationKeyword} 출장 오일 마사지`,
       `${locationKeyword} 출장 건식 마사지`,
       `${locationKeyword} 출장 림프 마사지`,
       `${simpleLocation} 출장 릴렉싱 마사지`,
-
-      /* 방문 및 서비스 형태 조합 */
       `${locationKeyword} 출장 방문 마사지`,
       `${locationKeyword} 출장 1대1 마사지`,
       `${locationKeyword} 출장 맞춤 마사지`,
       `${locationKeyword} 출장 프라이빗 마사지`,
       `${simpleLocation} 출장 힐러 마사지`,
-
-      /* 시간 및 속도 강조 조합 */
       `${locationKeyword} 출장 24시 마사지`,
       `${locationKeyword} 출장 야간 마사지`,
       `${locationKeyword} 출장 빠른 마사지`,
       `${locationKeyword} 출장 신속 마사지`,
       `${simpleLocation} 출장 즉시 마사지`,
-
-      /* 신뢰 및 결제 방식 조합 */
       `${locationKeyword} 출장 후불제 마사지`,
       `${locationKeyword} 출장 안심 마사지`,
       `${locationKeyword} 출장 정직한 마사지`,
       `${locationKeyword} 출장 보장 마사지`,
       `${simpleLocation} 출장 예약 마사지`,
-
-      /* 효능 및 프리미엄 조합 */
       `${locationKeyword} 출장 피로회복 마사지`,
       `${locationKeyword} 출장 프리미엄 마사지`,
       `${locationKeyword} 출장 VIP 마사지`,
@@ -169,7 +156,6 @@ export default async function SpacedMassagePage({ params, searchParams }: PagePr
 
   const fullTitle = dongName ? `${regionName} ${districtName} (${dongName})` : `${regionName} ${districtName}`;
 
-  // 💡 기존 5개 제휴업체 정보 완벽 유지
   const localShops = [
     {
       id: 1,
@@ -213,12 +199,10 @@ export default async function SpacedMassagePage({ params, searchParams }: PagePr
     },
   ];
 
-  // 🌟 지역명 기반 4.9~5.0점, 115~146개 리뷰수로 자연스럽게 분산
   const charSum = (fullTitle + districtName).split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const ratingValue = (4.9 + (charSum % 2) * 0.1).toFixed(1);
   const reviewCount = String(115 + (charSum % 32));
 
-  // 🌟 구글/네이버 SERP 별점 노출용 리치 스니펫 스키마
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -255,13 +239,11 @@ export default async function SpacedMassagePage({ params, searchParams }: PagePr
 
   return (
     <div className="bg-[#050505] text-gray-100 min-h-screen flex flex-col font-sans selection:bg-amber-500 selection:text-black">
-      {/* 🌟 검색엔진 리치 스니펫 수집 스크립트 */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* 상단 헤더 */}
       <header className="sticky top-0 z-50 bg-[#050505]/85 backdrop-blur-xl border-b border-amber-500/20 px-4 py-3.5 shadow-[0_4px_20px_rgba(245,158,11,0.1)]">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <Link href="/" className="flex items-center gap-3 group">
@@ -287,7 +269,6 @@ export default async function SpacedMassagePage({ params, searchParams }: PagePr
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8 w-full flex-1 space-y-10">
-        {/* 상단 배너 */}
         <section className="relative rounded-3xl overflow-hidden border border-amber-500/30 p-6 md:p-8 bg-gradient-to-b from-[#16161a] to-[#0a0a0c]">
           <span className="text-amber-400 text-xs font-black tracking-widest uppercase">
             {regionName.toUpperCase()} · 24H PRIVATE THERAPY
@@ -300,10 +281,9 @@ export default async function SpacedMassagePage({ params, searchParams }: PagePr
           </p>
         </section>
 
-        {/* 클라이언트 사이드 키워드 인젝터 */}
         <ClientTextMixer locationText={fullTitle} />
 
-        {/* 제휴업체 5개 카드 리스트 */}
+        {/* 🌟 제휴업체 5개 카드 리스트: ClientShopList 적용 (새로고침 시 실시간 랜덤 셔플) */}
         <section className="space-y-6">
           <div className="text-center">
             <p className="text-xs text-amber-400 font-bold tracking-widest uppercase">RECOMMENDED MASSAGE SHOPS</p>
@@ -312,45 +292,9 @@ export default async function SpacedMassagePage({ params, searchParams }: PagePr
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {localShops.map((lShop) => (
-              <div
-                key={lShop.id}
-                className="bg-[#121214] border border-amber-500/20 hover:border-amber-500/60 rounded-2xl p-4 flex gap-4 items-center shadow-lg transition-all group relative"
-              >
-                <Link
-                  href={`/shop/${lShop.id}`}
-                  className="absolute inset-0 z-10"
-                  aria-label={`${lShop.name} 상세페이지 보기`}
-                />
-                <img
-                  src={lShop.image}
-                  alt={lShop.name}
-                  className="w-20 h-20 md:w-24 md:h-24 rounded-xl object-cover border border-white/10 group-hover:scale-105 transition-transform"
-                />
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-extrabold text-sm md:text-base text-white truncate group-hover:text-amber-400 transition-colors">
-                    {lShop.name}
-                  </h3>
-                  <p className="text-[11px] text-gray-400 mt-1 line-clamp-2">
-                    {lShop.desc}
-                  </p>
-                  <div className="mt-2.5 flex items-center justify-between">
-                    <span className="text-xs font-black text-amber-400">{lShop.price}</span>
-                    <a
-                      href={`tel:${lShop.phone}`}
-                      className="bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs px-3.5 py-1.5 rounded-xl shadow transition-colors relative z-20"
-                    >
-                      전화연결
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <ClientShopList initialShops={localShops} />
         </section>
 
-        {/* 4단계 이용 순서 */}
         <section className="bg-[#0f0f12] p-6 md:p-8 rounded-3xl border border-amber-500/30 space-y-6">
           <div className="text-center">
             <span className="text-amber-400 text-xs font-bold tracking-widest uppercase">MASSAGE SERVICE STEP</span>
@@ -381,7 +325,6 @@ export default async function SpacedMassagePage({ params, searchParams }: PagePr
         </section>
       </main>
 
-      {/* 푸터 */}
       <footer className="bg-[#030303] border-t border-white/10 py-10 text-center text-gray-500 text-xs mt-auto">
         <div className="max-w-4xl mx-auto px-4 space-y-3">
           <div>
