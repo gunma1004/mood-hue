@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-// 서울·경기·인천 전지역 세부 데이터
+// 서울(25구), 경기(31시·군), 인천(11구·군) 전지역 세부 데이터
 const regionData: Record<
   string,
   { name: string; districts: Record<string, { name: string; dongs: string[] }> }
@@ -196,7 +196,7 @@ export default function MainClientUI() {
     setShuffledShops(shops);
   }, []);
 
-  // 1단계: 시·도 변경 시 구와 동을 완전히 초기화
+  // 1단계: 시·도 변경 시 구와 동을 초기화
   const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedRegion(e.target.value);
     setSelectedDistrict("");
@@ -209,8 +209,25 @@ export default function MainClientUI() {
     setSelectedDong("");
   };
 
-  // 이동 처리
-  const handleSearch = () => {
+  // 🌟 1번 페이지 이동: 직접 키워드 (/[region]/[district])
+  const handleDirectSearch = () => {
+    if (!selectedDistrict) {
+      alert("원하시는 지역(구/시)을 먼저 선택해주세요!");
+      return;
+    }
+    const districtObj = regionData[selectedRegion]?.districts[selectedDistrict];
+    const districtName = districtObj ? districtObj.name : selectedDistrict;
+    
+    const baseUrl = `/${selectedRegion}/${encodeURIComponent(districtName)}`;
+    const targetUrl = selectedDong 
+      ? `${baseUrl}?dong=${encodeURIComponent(selectedDong)}` 
+      : baseUrl;
+    
+    window.location.href = targetUrl;
+  };
+
+  // 🌟 2번 페이지 이동: 띄어쓰기 회피형 (/massage/[region]/[district])
+  const handleSpacedSearch = () => {
     if (!selectedDistrict) {
       alert("원하시는 지역(구/시)을 먼저 선택해주세요!");
       return;
@@ -226,11 +243,11 @@ export default function MainClientUI() {
     window.location.href = targetUrl;
   };
 
-  // 💡 구/시 목록 안전하게 추출 (항상 여러 개가 나오도록 보장)
+  // 구/시 목록 추출
   const currentDistricts = regionData[selectedRegion]?.districts || {};
   const currentDistrictKeys = Object.keys(currentDistricts);
 
-  // 💡 선택된 구에 해당하는 동 목록 안전하게 추출
+  // 동 목록 추출
   const currentDongs = (selectedDistrict && currentDistricts[selectedDistrict]?.dongs) || [];
 
   return (
@@ -333,12 +350,12 @@ export default function MainClientUI() {
           </div>
         </section>
 
-        {/* 🌟 다중 시·구·동 드롭다운 검색 섹션 */}
+        {/* 🌟 분리 이동 가능한 다중 시·구·동 검색 박스 */}
         <section className="pt-6 border-t border-white/10">
           <div className="bg-gradient-to-b from-[#18181b] to-[#0f0f11] border-2 border-amber-500/40 p-6 rounded-3xl max-w-xl mx-auto shadow-[0_10px_30px_rgba(0,0,0,0.8)] text-left relative overflow-hidden">
             <div className="flex items-center justify-between mb-4">
               <label className="text-xs text-amber-400 font-black uppercase tracking-wider flex items-center gap-1.5">
-                📍 내 동네 검색 및 이동하기
+                📍 내 동네 검색 및 페이지 선택 이동
               </label>
               <span className="text-[11px] text-gray-400 bg-black/40 px-2.5 py-1 rounded-lg border border-white/5">
                 수도권 전체 지원
@@ -360,7 +377,7 @@ export default function MainClientUI() {
                 </select>
               </div>
 
-              {/* 2단계: 구·시·군 선택 (모든 구/시가 목록에 출력됨) */}
+              {/* 2단계: 구·시·군 선택 */}
               <div>
                 <span className="text-[11px] text-gray-400 block mb-1 font-semibold">
                   2단계: 구·시·군 선택 ({currentDistrictKeys.length}개 지역)
@@ -381,7 +398,7 @@ export default function MainClientUI() {
                 </select>
               </div>
 
-              {/* 3단계: 동 선택 (선택된 구에 해당하는 모든 동이 출력됨) */}
+              {/* 3단계: 동 선택 */}
               <div>
                 <span className="text-[11px] text-gray-400 block mb-1 font-semibold">
                   3단계: 동 선택 {selectedDistrict ? `(${currentDongs.length}개 동)` : "(구/시 선택 필요)"}
@@ -403,12 +420,30 @@ export default function MainClientUI() {
                 </select>
               </div>
 
-              <button 
-                onClick={handleSearch}
-                className="w-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-400 hover:to-yellow-300 text-black font-black py-4 rounded-2xl text-sm transition-all shadow-[0_0_25px_rgba(245,158,11,0.4)] mt-3 cursor-pointer transform active:scale-[0.98]"
-              >
-                🚀 해당 지역 출장 마사지 화면으로 이동하기
-              </button>
+              {/* 🌟 1번 & 2번 페이지 선택 이동 듀얼 버튼 */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
+                {/* 1번 페이지 이동 버튼 */}
+                <button 
+                  onClick={handleDirectSearch}
+                  className="w-full bg-[#1c1c20] hover:bg-[#25252b] text-amber-400 font-bold py-3.5 px-3 rounded-2xl text-xs border border-amber-500/30 hover:border-amber-500/60 transition-all cursor-pointer flex flex-col items-center justify-center gap-1 active:scale-95 shadow-md"
+                >
+                  <span className="text-[10px] text-gray-400 font-medium">직접 키워드 전용</span>
+                  <span className="font-extrabold text-white text-xs">📍 1번: 지역 홈케어 보기</span>
+                </button>
+
+                {/* 2번 페이지 이동 버튼 */}
+                <button 
+                  onClick={handleSpacedSearch}
+                  className="w-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-400 hover:to-yellow-300 text-black font-black py-3.5 px-3 rounded-2xl text-xs transition-all shadow-[0_0_20px_rgba(245,158,11,0.3)] cursor-pointer flex flex-col items-center justify-center gap-1 active:scale-95"
+                >
+                  <span className="text-[10px] text-neutral-800 font-bold">띄어쓰기 타겟 전용</span>
+                  <span className="font-black text-black text-xs">💆 2번: 마사지 코스 보기</span>
+                </button>
+              </div>
+
+              <p className="text-[10px] text-gray-400 text-center pt-1">
+                * 1번(홈케어)과 2번(마사지) 페이지는 각각 별점 스키마와 최적화된 SEO 키워드가 적용되어 있습니다.
+              </p>
             </div>
           </div>
         </section>
@@ -421,7 +456,7 @@ export default function MainClientUI() {
           <div>
             <a 
               href="tel:0507-1280-3344" 
-              className="inline-flex items-center gap-1.5 bg-neutral-900 text-amber-400 font-bold px-4 py-2 rounded-xl border border-amber-500/30 text-xs shadow-md"
+              className="inline-flex items-center gap-1.5 bg-neutral-900 text-amber-400 font-bold px-4 py-2 rounded-xl border border-amber-500/30 text-xs shadow-md hover:border-amber-400 transition-colors"
             >
               <span>🤝</span> 제휴문의 (0507-1280-3344)
             </a>
