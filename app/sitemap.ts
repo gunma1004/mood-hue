@@ -1,8 +1,8 @@
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  // 🌐 적용할 새 도메인 주수
-  const baseUrl = 'https://gunmasarang-massage4.vercel.app';
+  // 🌐 신규 대표 도메인 주소
+  const baseUrl = 'https://mood-hue.netlify.app';
 
   // 1. 메인 대표 홈 페이지
   const mainRoute: MetadataRoute.Sitemap = [
@@ -14,7 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // 2. 상단 카테고리 메인 페이지들 (SEO 품질 향상용)
+  // 2. 상단 카테고리 메인 페이지들 (SEO 품질 향상용 화이트햇 콘텐츠)
   const categoryRoutes: MetadataRoute.Sitemap = [
     'services',
     'prices',
@@ -36,9 +36,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  // 4. 구·시 주요 권역 목록 (네이버 스팸 방지 및 404 방지를 위해 구/시 경로만 유일 URL로 깔끔하게 정돈)
+  // 4. 서울·경기·인천 주요 권역 목록 (전체 시/구)
   const regionList = [
-    // 서울 주요 권역
+    // 서울 25개 구
     { region: 'seoul', district: '종로구' },
     { region: 'seoul', district: '중구' },
     { region: 'seoul', district: '용산구' },
@@ -76,28 +76,61 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { region: 'gyeonggi', district: '고양시 덕양구' },
     { region: 'gyeonggi', district: '고양시 일산동구' },
     { region: 'gyeonggi', district: '고양시 일산서구' },
-    { region: 'gyeonggi', district: '용인시 수지구' },
+    { region: 'gyeonggi', district: '용인시 처인구' },
     { region: 'gyeonggi', district: '용인시 기흥구' },
+    { region: 'gyeonggi', district: '용인시 수지구' },
     { region: 'gyeonggi', district: '부천시 원미구' },
+    { region: 'gyeonggi', district: '부천시 소사구' },
+    { region: 'gyeonggi', district: '부천시 오정구' },
+    { region: 'gyeonggi', district: '안산시 상록구' },
+    { region: 'gyeonggi', district: '안산시 단원구' },
+    { region: 'gyeonggi', district: '안양시 만안구' },
+    { region: 'gyeonggi', district: '안양시 동안구' },
+    { region: 'gyeonggi', district: '화성시' },
+    { region: 'gyeonggi', district: '남양주시' },
+    { region: 'gyeonggi', district: '평택시' },
+    { region: 'gyeonggi', district: '시흥시' },
+    { region: 'gyeonggi', district: '파주시' },
+    { region: 'gyeonggi', district: '김포시' },
+    { region: 'gyeonggi', district: '의정부시' },
+    { region: 'gyeonggi', district: '광주시' },
+    { region: 'gyeonggi', district: '하남시' },
 
-    // 인천 주요 권역
-    { region: 'incheon', district: '중구' },
+    // 인천 주요 권역 (최신 개편 권역 포함)
+    { region: 'incheon', district: '제물포구' },
+    { region: 'incheon', district: '영종구' },
+    { region: 'incheon', district: '검단구' },
+    { region: 'incheon', district: '서해구' },
     { region: 'incheon', district: '미추홀구' },
     { region: 'incheon', district: '연수구' },
     { region: 'incheon', district: '남동구' },
     { region: 'incheon', district: '부평구' },
     { region: 'incheon', district: '계양구' },
-    { region: 'incheon', district: '서구' },
+    { region: 'incheon', district: '강화군' },
+    { region: 'incheon', district: '옹진군' },
   ];
 
-  const regionRoutes: MetadataRoute.Sitemap = regionList.map((item) => {
-    return {
-      url: `${baseUrl}/${item.region}/${encodeURIComponent(item.district)}`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    };
-  });
+  // 4-1. 기본 직접 키워드 지역 경로 (/[region]/[district])
+  const directRegionRoutes: MetadataRoute.Sitemap = regionList.map((item) => ({
+    url: `${baseUrl}/${item.region}/${encodeURIComponent(item.district)}`,
+    lastModified: new Date(),
+    changeFrequency: 'daily',
+    priority: 0.9,
+  }));
 
-  return [...mainRoute, ...categoryRoutes, ...shopRoutes, ...regionRoutes];
+  // 4-2. 🌟 띄어쓰기 회피형 신규 지역 경로 (/massage/[region]/[district])
+  const spacedMassageRoutes: MetadataRoute.Sitemap = regionList.map((item) => ({
+    url: `${baseUrl}/massage/${item.region}/${encodeURIComponent(item.district)}`,
+    lastModified: new Date(),
+    changeFrequency: 'daily',
+    priority: 0.9,
+  }));
+
+  return [
+    ...mainRoute,
+    ...categoryRoutes,
+    ...shopRoutes,
+    ...directRegionRoutes,
+    ...spacedMassageRoutes,
+  ];
 }

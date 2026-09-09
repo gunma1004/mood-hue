@@ -101,7 +101,6 @@ export default function ShopDetailPage({ params }: PageProps) {
   const resolvedParams = use(params);
   const shopId = resolvedParams.id;
   
-  // 선택한 ID에 맞는 샵이 없거나 잘못된 경우 안내 문구를 보여주도록 처리
   const shop = shopData[shopId];
 
   if (!shop) {
@@ -127,12 +126,12 @@ export default function ShopDetailPage({ params }: PageProps) {
           <Link href="/" className="flex items-center gap-3 group">
             <img 
               src="/logo.png" 
-              alt="건마사랑 로고" 
+              alt="무드앤휴 로고" 
               className="w-10 h-10 rounded-xl object-cover border border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.4)] group-hover:scale-105 transition-transform" 
             />
             <div className="flex flex-col">
               <span className="text-xl font-black tracking-wider bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
-                건마사랑
+                무드앤휴
               </span>
               <span className="text-[10px] text-gray-400 tracking-tighter">PREMIUM LANDING SHOP</span>
             </div>
@@ -218,14 +217,14 @@ export default function ShopDetailPage({ params }: PageProps) {
             <span>📌</span> 이용 예약 안내
           </h3>
           <ul className="text-xs text-gray-300 space-y-1.5 list-disc list-inside">
-            <li>건마사랑 제휴업체는 <strong>100% 후불제</strong>로 운영됩니다. 도착 전 선입금을 요구하지 않습니다.</li>
+            <li>무드앤휴 제휴업체는 <strong>100% 후불제</strong>로 운영됩니다. 도착 전 선입금을 요구하지 않습니다.</li>
             <li>희망하시는 시간 20~30분 전에 미리 예약 문의 주시면 원활한 서비스가 가능합니다.</li>
           </ul>
         </section>
 
       </main>
 
-      {/* 하단 전화/문자 바 */}
+      {/* 하단 고정 전화/문자 예약 바 */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#08080a]/95 backdrop-blur-xl border-t border-amber-500/30 p-3 md:p-4 shadow-[0_-10px_25px_rgba(0,0,0,0.8)]">
         <div className="max-w-4xl mx-auto grid grid-cols-2 gap-3">
           <a 
@@ -235,7 +234,7 @@ export default function ShopDetailPage({ params }: PageProps) {
             <span className="text-lg">📞</span> 전화로 즉시예약
           </a>
           <a 
-            href={`sms:${shop.phone}?body=${encodeURIComponent(`${shop.name} 문의드립니다. (건마사랑 보고 연락드렸어요)`)}`}
+            href={`sms:${shop.phone}?body=${encodeURIComponent(`${shop.name} 문의드립니다. (무드앤휴 보고 연락드렸어요)`)}`}
             className="flex items-center justify-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white font-black py-3.5 rounded-2xl text-xs md:text-sm border border-white/10 hover:border-amber-500/40 transition-transform active:scale-95"
           >
             <span className="text-lg">💬</span> 간편 문자상담
