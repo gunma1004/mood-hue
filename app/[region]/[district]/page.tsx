@@ -30,110 +30,112 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
     .reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const variantIndex = charSum % 50;
 
+  // 🌟 타이틀: 타이, 아로마, 스웨디시, 홈케어 등 다양한 테라피 키워드가 다채롭게 조합되도록 변경
   const titleVariants = [
-    /* 0 */ `${locationKeyword} 출장마사지 추천 | 24시 빠른방문 힐링 케어 - 무드앤휴`,
-    /* 1 */ `[무드앤휴] ${locationKeyword} 출장마사지 안내 · 100% 안심 후불제`,
-    /* 2 */ `${simpleLocation} 출장마사지 24시 전문 안내 | ${regionName} 프라이빗 힐링`,
-    /* 3 */ `${locationKeyword} 출장마사지 제휴업체 정보 및 후불제 예약 가이드`,
-    /* 4 */ `${locationKeyword} 출장마사지 빠른 방문 24시 | 스웨디시 & 아로마 전문`,
-    /* 5 */ `무드앤휴 | ${simpleLocation} 출장마사지 안심 후불제 힐링 테라피`,
-    /* 6 */ `${locationKeyword} 출장마사지 신속 도착 · 선입금 없는 정직한 바디케어`,
-    /* 7 */ `${regionName} ${simpleLocation} 출장마사지 24시 예약 및 제휴 코스 안내`,
-    /* 8 */ `${locationKeyword} 출장마사지 홈케어 | 프라이빗 1:1 맞춤형 피로회복`,
-    /* 9 */ `[24시 방문] ${locationKeyword} 출장마사지 추천 업체 모음 · 무드앤휴`,
-    /* 10 */ `${simpleLocation} 출장마사지 릴렉싱 케어 | 후불제 홈테라피 가이드`,
-    /* 11 */ `${locationKeyword} 출장마사지 25분 내 빠르게 달려갑니다 - 무드앤휴`,
-    /* 12 */ `프라이빗 힐링 ${locationKeyword} 출장마사지 | 타이·아로마·스웨디시`,
-    /* 13 */ `${locationKeyword} 출장마사지 24시 엄선된 제휴업체 및 요금 안내`,
-    /* 14 */ `${simpleLocation} 출장마사지 잘하는 곳 | 100% 후불 안심 테라피`,
-    /* 15 */ `${locationKeyword} 출장마사지 신속한 예약 서비스 | 무드앤휴 공식`,
-    /* 16 */ `[무드앤휴 24시] ${locationKeyword} 출장마사지 베테랑 힐러 케어`,
-    /* 17 */ `${locationKeyword} 출장마사지 가이드 | 스웨디시·아로마·홈케어`,
-    /* 18 */ `${simpleLocation} 출장마사지 24시간 언제나 빠르게 출동합니다`,
-    /* 19 */ `${locationKeyword} 출장마사지 선입금 X | 안심 후불 바디케어`,
-    /* 20 */ `${regionName} ${simpleLocation} 출장마사지 릴렉스 전문 제휴 가이드`,
-    /* 21 */ `${locationKeyword} 출장마사지 만족도 높고 신속한 24시 테라피`,
-    /* 22 */ `[공식] ${locationKeyword} 출장마사지 제휴업체 코스 및 가격 안내`,
-    /* 23 */ `${simpleLocation} 출장마사지 25분 내 빠르게 만나는 힐링 타임`,
-    /* 24 */ `${locationKeyword} 출장마사지 프라이빗 케어 | 후불제 홈테라피`,
-    /* 25 */ `무드앤휴 추천 ${locationKeyword} 출장마사지 24시 안심 서비스`,
-    /* 26 */ `${locationKeyword} 출장마사지 타이 & 아로마 전문 힐링 케어`,
-    /* 27 */ `${simpleLocation} 출장마사지 예약 가이드 · 100% 후불제 시스템`,
-    /* 28 */ `${locationKeyword} 출장마사지 친절 방문 | 전신 피로 완화 케어`,
-    /* 29 */ `[24시 신속] ${simpleLocation} 출장마사지 힐링 테라피 정보`,
-    /* 30 */ `${locationKeyword} 출장마사지 프리미엄 제휴 안내 - 무드앤휴`,
-    /* 31 */ `${locationKeyword} 출장마사지 내 주변 빠른 방문 케어 서비스`,
-    /* 32 */ `${simpleLocation} 출장마사지 24시간 후불 예약 및 이용 방법`,
-    /* 33 */ `${locationKeyword} 출장마사지 정직하고 안전한 1:1 방문 케어`,
-    /* 34 */ `[무드앤휴] ${simpleLocation} 출장마사지 추천 매장 종합 안내`,
-    /* 35 */ `${locationKeyword} 출장마사지 힐링 코스 & 가격 상세 안내`,
-    /* 36 */ `${locationKeyword} 출장마사지 선입금 절대 없는 24시 방문 서비스`,
-    /* 37 */ `${simpleLocation} 출장마사지 베테랑 테라피스트 빠른 방문`,
-    /* 38 */ `${locationKeyword} 출장마사지 나만을 위한 프라이빗 힐링 공간`,
-    /* 39 */ `[24시 출장] ${locationKeyword} 출장마사지 안심 후불제 안내`,
-    /* 40 */ `${locationKeyword} 출장마사지 오일 & 건식 케어 제휴업체 정보`,
-    /* 41 */ `${simpleLocation} 출장마사지 건전 방문 힐링 서비스 가이드`,
-    /* 42 */ `${locationKeyword} 출장마사지 피로가 싹 풀리는 1:1 맞춤 테라피`,
-    /* 43 */ `무드앤휴 | ${locationKeyword} 출장마사지 25분 내 빠른 케어`,
-    /* 44 */ `${simpleLocation} 출장마사지 엄선된 24시 제휴 매장 목록`,
-    /* 45 */ `${locationKeyword} 출장마사지 후불제 24시 스웨디시 전문 안내`,
-    /* 46 */ `${locationKeyword} 출장마사지 편안한 집에서 받는 릴렉싱 케어`,
-    /* 47 */ `[안심후불] ${simpleLocation} 출장마사지 24시간 방문 테라피`,
-    /* 48 */ `${locationKeyword} 출장마사지 최고급 아로마 오일 테라피 코스`,
-    /* 49 */ `${locationKeyword} 출장마사지 신속 예약 및 이용 후기 안내 - 무드앤휴`,
+    /* 0 */ `${locationKeyword} 타이마사지 추천 | 24시 빠른방문 힐링 케어 - 무드앤휴`,
+    /* 1 */ `[무드앤휴] ${locationKeyword} 아로마마사지 안내 · 100% 안심 후불제`,
+    /* 2 */ `${simpleLocation} 스웨디시 마사지 24시 전문 안내 | ${regionName} 프라이빗 힐링`,
+    /* 3 */ `${locationKeyword} 홈테라피 마사지 제휴업체 정보 및 후불제 예약 가이드`,
+    /* 4 */ `${locationKeyword} 타이 & 아로마 마사지 빠른 방문 24시 | 전문 힐링`,
+    /* 5 */ `무드앤휴 | ${simpleLocation} 감성 마사지 안심 후불제 테라피`,
+    /* 6 */ `${locationKeyword} 스웨디시 마사지 신속 도착 · 선입금 없는 정직한 바디케어`,
+    /* 7 */ `${regionName} ${simpleLocation} 타이마사지 24시 예약 및 제휴 코스 안내`,
+    /* 8 */ `${locationKeyword} 아로마 마사지 홈케어 | 프라이빗 1:1 맞춤형 피로회복`,
+    /* 9 */ `[24시 방문] ${locationKeyword} 홈케어 마사지 추천 업체 모음 · 무드앤휴`,
+    /* 10 */ `${simpleLocation} 타이마사지 릴렉싱 케어 | 후불제 테라피 가이드`,
+    /* 11 */ `${locationKeyword} 스웨디시 마사지 25분 내 빠르게 달려갑니다 - 무드앤휴`,
+    /* 12 */ `프라이빗 힐링 ${locationKeyword} 아로마 마사지 | 전신 피로회복`,
+    /* 13 */ `${locationKeyword} 타이마사지 24시 엄선된 제휴업체 및 요금 안내`,
+    /* 14 */ `${simpleLocation} 감성 마사지 잘하는 곳 | 100% 후불 안심 테라피`,
+    /* 15 */ `${locationKeyword} 홈케어 마사지 신속한 예약 서비스 | 무드앤휴 공식`,
+    /* 16 */ `[무드앤휴 24시] ${locationKeyword} 스웨디시 마사지 베테랑 힐러 케어`,
+    /* 17 */ `${locationKeyword} 아로마 마사지 가이드 | 타이·스웨디시·홈케어`,
+    /* 18 */ `${simpleLocation} 타이마사지 24시간 언제나 빠르게 찾아갑니다`,
+    /* 19 */ `${locationKeyword} 감성 마사지 선입금 X | 안심 후불 바디케어`,
+    /* 20 */ `${regionName} ${simpleLocation} 홈케어 마사지 릴렉스 전문 제휴 가이드`,
+    /* 21 */ `${locationKeyword} 스웨디시 마사지 만족도 높고 신속한 24시 테라피`,
+    /* 22 */ `[공식] ${locationKeyword} 타이마사지 제휴업체 코스 및 가격 안내`,
+    /* 23 */ `${simpleLocation} 아로마 마사지 25분 내 빠르게 만나는 힐링 타임`,
+    /* 24 */ `${locationKeyword} 홈케어 마사지 프라이빗 케어 | 후불제 테라피`,
+    /* 25 */ `무드앤휴 추천 ${locationKeyword} 스웨디시 마사지 24시 안심 서비스`,
+    /* 26 */ `${locationKeyword} 타이 & 아로마 마사지 전문 힐링 케어`,
+    /* 27 */ `${simpleLocation} 감성 마사지 예약 가이드 · 100% 후불제 시스템`,
+    /* 28 */ `${locationKeyword} 홈케어 마사지 친절 방문 | 전신 피로 완화 케어`,
+    /* 29 */ `[24시 신속] ${simpleLocation} 타이마사지 힐링 테라피 정보`,
+    /* 30 */ `${locationKeyword} 스웨디시 마사지 프리미엄 제휴 안내 - 무드앤휴`,
+    /* 31 */ `${locationKeyword} 아로마 마사지 내 주변 빠른 방문 케어 서비스`,
+    /* 32 */ `${simpleLocation} 홈케어 마사지 24시간 후불 예약 및 이용 방법`,
+    /* 33 */ `${locationKeyword} 타이마사지 정직하고 안전한 1:1 방문 케어`,
+    /* 34 */ `[무드앤휴] ${simpleLocation} 스웨디시 마사지 추천 매장 종합 안내`,
+    /* 35 */ `${locationKeyword} 감성 마사지 힐링 코스 & 가격 상세 안내`,
+    /* 36 */ `${locationKeyword} 아로마 마사지 선입금 절대 없는 24시 방문 서비스`,
+    /* 37 */ `${simpleLocation} 홈케어 마사지 베테랑 테라피스트 빠른 방문`,
+    /* 38 */ `${locationKeyword} 타이마사지 나만을 위한 프라이빗 힐링 공간`,
+    /* 39 */ `[24시 방문] ${locationKeyword} 스웨디시 마사지 안심 후불제 안내`,
+    /* 40 */ `${locationKeyword} 감성 마사지 오일 & 건식 케어 제휴업체 정보`,
+    /* 41 */ `${simpleLocation} 아로마 마사지 건전 방문 힐링 서비스 가이드`,
+    /* 42 */ `${locationKeyword} 홈케어 마사지 피로가 싹 풀리는 1:1 맞춤 테라피`,
+    /* 43 */ `무드앤휴 | ${locationKeyword} 타이마사지 25분 내 빠른 케어`,
+    /* 44 */ `${simpleLocation} 스웨디시 마사지 엄선된 24시 제휴 매장 목록`,
+    /* 45 */ `${locationKeyword} 아로마 마사지 후불제 24시 전문 안내`,
+    /* 46 */ `${locationKeyword} 감성 마사지 편안한 집에서 받는 릴렉싱 케어`,
+    /* 47 */ `[안심후불] ${simpleLocation} 홈케어 마사지 24시간 방문 테라피`,
+    /* 48 */ `${locationKeyword} 타이마사지 최고급 아로마 오일 테라피 코스`,
+    /* 49 */ `${locationKeyword} 스웨디시 마사지 신속 예약 및 이용 후기 안내 - 무드앤휴`,
   ];
 
+  // 디스크립션: "출장" 단어 분리 유지 + 마사지 종류 다양화
   const descriptionVariants = [
-    /* 0 */ `${locationKeyword} 출장마사지 25분 내 빠른 방문! 선입금 없는 100% 안심 후불제. 타이, 아로마, 스웨디시 안내.`,
-    /* 1 */ `프라이빗 피로회복! ${locationKeyword} 24시 출장마사지 가이드. 베테랑 테라피스트의 맞춤 힐링을 확인하세요.`,
-    /* 2 */ `${locationKeyword} 전지역 신속 출장마사지 예약. 부담 없는 후불제와 정직한 코스 정보 제공, 무드앤휴 안내.`,
-    /* 3 */ `${simpleLocation} 고객을 위한 24시 안심 출장마사지. 스웨디시, 아로마 릴렉싱 정보 및 빠른 전화 연결.`,
-    /* 4 */ `${locationKeyword} 출장마사지! 100% 후불제로 안심하고 즐기는 프라이빗 홈케어 전문 가이드입니다.`,
-    /* 5 */ `일상의 피로를 풀어줄 ${locationKeyword} 24시 출장마사지. 빠른 방문과 베테랑 힐러의 품격 케어를 만나보세요.`,
-    /* 6 */ `${locationKeyword} 25분 내 도착! 선입금 없는 안심 후불제 출장마사지와 힐링 바디케어 코스 추천.`,
-    /* 7 */ `${simpleLocation} 출장마사지 전문 제휴업체 모음. 24시간 개인 공간에서 누리는 프리미엄 스웨디시 케어.`,
-    /* 8 */ `${locationKeyword} 믿을 수 있는 후불제 출장마사지 정보. 타이, 아로마, 전신 오일 테라피를 한눈에 비교하세요.`,
-    /* 9 */ `무드앤휴 보장 ${locationKeyword} 출장마사지 안심 케어! 선입금 없이 도착 후 결제하는 100% 안전 시스템.`,
-    /* 10 */ `${locationKeyword} 24시 방문 출장마사지 종합 안내. 맞춤형 힐링 케어로 묵은 피로를 시원하게 해소해 드립니다.`,
-    /* 11 */ `${simpleLocation} 출장마사지 코스 및 가격 안내. 24시간 친절 상담과 빠른 방문으로 만족도를 높입니다.`,
-    /* 12 */ `${locationKeyword} 출장마사지 릴렉싱 프로그램. 프라이빗한 1:1 맞춤 케어로 편안함과 활력을 되찾아드립니다.`,
-    /* 13 */ `${locationKeyword} 24시 출장마사지 예약 가이드. 선입금 걱정 없는 100% 후불제 제휴업체 정보만 선별 전달합니다.`,
-    /* 14 */ `${simpleLocation} 신속 방문 24시 출장마사지. 타이, 아로마, 스웨디시 나에게 딱 맞는 힐링 테라피 추천.`,
-    /* 15 */ `${locationKeyword} 출장마사지 안심 예약! 예약금 없는 정직한 100% 후불 시스템으로 편안하게 이용해 보세요.`,
-    /* 16 */ `전문 힐러의 손길로 누리는 ${locationKeyword} 출장마사지. 빠른 방문 시간과 합리적인 코스를 확인하세요.`,
-    /* 17 */ `${simpleLocation} 24시 방문 출장마사지 서비스. 쌓인 스트레스와 뭉친 근육을 부드럽게 이완시켜 드립니다.`,
-    /* 18 */ `${locationKeyword} 출장마사지 엄선 제휴업체 안내. 선입금 없는 검증된 1:1 방문 맞춤 케어를 제공합니다.`,
-    /* 19 */ `${locationKeyword} 25분 내 출동하는 출장마사지! 친절 상담과 신속한 도착으로 언제든 편하게 이용 가능합니다.`,
-    /* 20 */ `${simpleLocation} 만족도 1위 후불제 출장마사지 가이드. 전신 아로마, 스웨디시 코스로 피로를 녹여보세요.`,
-    /* 21 */ `${locationKeyword} 출장마사지 24시 상시 운영! 100% 후불 안심 예약 서비스로 부담 없이 이용하세요.`,
-    /* 22 */ `무드앤휴 공식 ${locationKeyword} 출장마사지 안내. 신속한 방문과 차별화된 프리미엄 홈케어를 만나보세요.`,
-    /* 23 */ `${simpleLocation} 전문 출장마사지 가이드. 1:1 맞춤 피로회복 케어로 쾌적한 힐링 시간을 선물해 드립니다.`,
-    /* 24 */ `${locationKeyword} 전지역 신속 출장마사지 예약! 선입금 없는 후불제로 즐기는 럭셔리 스웨디시 & 아로마.`,
-    /* 25 */ `지친 몸에 활력을 줄 ${locationKeyword} 24시 출장마사지. 검증된 관리사의 다채로운 힐링 코스 추천.`,
-    /* 26 */ `${simpleLocation} 출장마사지 가격 및 코스 안내. 24시간 원하는 시간에 맞춰 방문하는 프라이빗 케어.`,
-    /* 27 */ `${locationKeyword} 출장마사지 안심 후불제 추천! 출발 전 예약금을 요구하지 않는 안전한 업체 정보 모음.`,
-    /* 28 */ `${locationKeyword} 25분 신속 방문 출장마사지. 뭉친 승모근과 하체 피로를 상쾌하게 풀어드립니다.`,
-    /* 29 */ `${simpleLocation} 최상의 24시 출장마사지 제휴 안내. 정직한 서비스와 투명한 요금을 확인해보세요.`,
-    /* 30 */ `${locationKeyword} 출장마사지 타이, 아로마 맞춤 케어! 개인 공간에서 편안하게 누리는 힐링 타임.`,
-    /* 31 */ `100% 후불제로 안심할 수 있는 ${locationKeyword} 24시 출장마사지. 빠른 방문과 친절한 서비스 제공.`,
-    /* 32 */ `${simpleLocation} 출장마사지 힐링 테라피 모음. 24시간 언제나 빠르게 이용할 수 있는 수도권 안심 가이드.`,
-    /* 33 */ `${locationKeyword} 출장마사지 전문 제휴업체 정보. 신속한 방문 서비스와 꼼꼼한 전신 이완 프로그램을 확인하세요.`,
-    /* 34 */ `${locationKeyword} 24시 안심 출장마사지 이용 방법. 예약부터 도착까지 100% 후불제로 안전하게 진행됩니다.`,
-    /* 35 */ `${simpleLocation} 출장마사지 전문 테라피스트 빠른 배치. 프리미엄 아로마 및 스웨디시로 피로를 회복하세요.`,
-    /* 36 */ `${locationKeyword} 24시 출장마사지 빠른 방문 보장. 선입금 없는 100% 안심 후불제로 편하게 이용하세요.`,
-    /* 37 */ `${locationKeyword} 출장마사지 1:1 프라이빗 테라피. 지친 일상 속 깊은 휴식과 릴렉싱을 제공하는 제휴 정보.`,
-    /* 38 */ `${simpleLocation} 25분 내 빠른 출동 출장마사지! 전신 근육 긴장 완화 및 안정을 돕는 프리미엄 케어.`,
-    /* 39 */ `무드앤휴에서 엄선한 ${locationKeyword} 24시 출장마사지 모음. 깔끔하고 정직한 제휴 정보를 확인하세요.`,
-    /* 40 */ `${locationKeyword} 출장마사지 타이 & 스웨디시 정보. 선입금 요구가 전혀 없는 안전한 후불제 매장만 안내합니다.`,
-    /* 41 */ `${simpleLocation} 출장마사지 24시간 예약 지원. 나만의 프라이빗한 장소에서 편안하게 하루 피로를 풀어보세요.`,
-    /* 42 */ `${locationKeyword} 출장마사지 릴렉스 가이드. 투명한 요금 체계와 베테랑 힐러의 깊이 있는 홈케어 서비스.`,
-    /* 43 */ `${locationKeyword} 전지역 24시 신속 방문 출장마사지. 아로마 테라피로 지친 몸과 마음에 휴식을 선사합니다.`,
-    /* 44 */ `${simpleLocation} 출장마사지 제휴업체 실시간 가이드. 100% 후불 안전 거래와 깔끔한 서비스 구성 안내.`,
-    /* 45 */ `${locationKeyword} 출장마사지 빠른 예약 안내. 24시간 편한 시간에 맞춰 방문하는 1:1 맞춤 피로해소 코스.`,
-    /* 46 */ `${locationKeyword} 출장마사지 추천 가이드! 선입금 없는 후불제로 마음 편히 이용할 수 있는 바디 테라피.`,
-    /* 47 */ `${simpleLocation} 출장마사지 신속 방문 시스템. 전문 테라피스트가 직접 찾아가 고품격 테라피를 선사합니다.`,
-    /* 48 */ `${locationKeyword} 24시 방문 출장마사지 정리. 코스별 요금 및 1:1 전화 연결 서비스를 제공합니다.`,
-    /* 49 */ `${locationKeyword} 출장마사지 안심 이용 가이드. 100% 후불제 시스템과 정직한 제휴 정보로 신뢰를 드립니다.`,
+    /* 0 */ `${locationKeyword} 지역 출장 및 타이마사지 25분 내 빠른 방문! 선입금 없는 100% 안심 후불제. 타이, 아로마, 스웨디시 안내.`,
+    /* 1 */ `프라이빗 피로회복! ${locationKeyword} 24시 출장 전문 아로마마사지 가이드. 베테랑 테라피스트의 맞춤 힐링을 확인하세요.`,
+    /* 2 */ `${locationKeyword} 전지역 신속 출장 및 스웨디시 마사지 예약. 부담 없는 후불제와 정직한 코스 정보 제공, 무드앤휴 안내.`,
+    /* 3 */ `${simpleLocation} 고객을 위한 24시 안심 출장 및 홈케어 마사지. 오일, 건식 릴렉싱 정보 및 빠른 전화 연결.`,
+    /* 4 */ `${locationKeyword} 출장 방문 타이마사지! 100% 후불제로 안심하고 즐기는 프라이빗 바디케어 전문 가이드입니다.`,
+    /* 5 */ `일상의 피로를 풀어줄 ${locationKeyword} 24시 출장 및 감성 마사지. 빠른 방문과 베테랑 힐러의 품격 케어를 만나보세요.`,
+    /* 6 */ `${locationKeyword} 25분 내 도착! 선입금 없는 안심 후불제 출장 방문 아로마마사지와 힐링 코스 추천.`,
+    /* 7 */ `${simpleLocation} 출장 및 스웨디시 마사지 전문 제휴업체 모음. 24시간 개인 공간에서 누리는 프리미엄 테라피 케어.`,
+    /* 8 */ `${locationKeyword} 믿을 수 있는 후불제 출장 방문 홈케어 마사지 정보. 타이, 아로마, 전신 오일 테라피를 한눈에 비교하세요.`,
+    /* 9 */ `무드앤휴 보장 ${locationKeyword} 출장 및 타이마사지 안심 케어! 선입금 없이 도착 후 결제하는 100% 안전 시스템.`,
+    /* 10 */ `${locationKeyword} 24시 출장 방문 아로마마사지 종합 안내. 맞춤형 힐링 케어로 묵은 피로를 시원하게 해소해 드립니다.`,
+    /* 11 */ `${simpleLocation} 출장 및 스웨디시 마사지 코스 및 가격 안내. 24시간 친절 상담과 빠른 방문으로 만족도를 높입니다.`,
+    /* 12 */ `${locationKeyword} 출장 방문 홈케어 마사지 릴렉싱 프로그램. 프라이빗한 1:1 맞춤 케어로 편안함과 활력을 되찾아드립니다.`,
+    /* 13 */ `${locationKeyword} 24시 출장 및 감성 마사지 예약 가이드. 선입금 걱정 없는 100% 후불제 제휴업체 정보만 선별 전달합니다.`,
+    /* 14 */ `${simpleLocation} 신속 방문 24시 출장 및 타이마사지. 아로마, 스웨디시 나에게 딱 맞는 힐링 테라피 추천.`,
+    /* 15 */ `${locationKeyword} 출장 방문 아로마마사지 안심 예약! 예약금 없는 정직한 100% 후불 시스템으로 편안하게 이용해 보세요.`,
+    /* 16 */ `전문 힐러의 손길로 누리는 ${locationKeyword} 출장 및 스웨디시 마사지. 빠른 방문 시간과 합리적인 코스를 확인하세요.`,
+    /* 17 */ `${simpleLocation} 24시 출장 방문 홈케어 마사지 서비스. 쌓인 스트레스와 뭉친 근육을 부드럽게 이완시켜 드립니다.`,
+    /* 18 */ `${locationKeyword} 출장 및 타이마사지 엄선 제휴업체 안내. 선입금 없는 검증된 1:1 방문 맞춤 케어를 제공합니다.`,
+    /* 19 */ `${locationKeyword} 25분 내 출동하는 출장 및 감성 마사지! 친절 상담과 신속한 도착으로 언제든 편하게 이용 가능합니다.`,
+    /* 20 */ `${simpleLocation} 만족도 1위 후불제 출장 방문 아로마마사지 가이드. 전신 오일, 스웨디시 코스로 피로를 녹여보세요.`,
+    /* 21 */ `${locationKeyword} 출장 및 스웨디시 마사지 24시 상시 운영! 100% 후불 안심 예약 서비스로 부담 없이 이용하세요.`,
+    /* 22 */ `무드앤휴 공식 ${locationKeyword} 출장 방문 홈케어 마사지 안내. 신속한 방문과 차별화된 프리미엄 테라피를 만나보세요.`,
+    /* 23 */ `${simpleLocation} 전문 출장 및 타이마사지 가이드. 1:1 맞춤 피로회복 케어로 쾌적한 힐링 시간을 선물해 드립니다.`,
+    /* 24 */ `${locationKeyword} 전지역 신속 출장 방문 아로마마사지 예약! 선입금 없는 후불제로 즐기는 럭셔리 스웨디시 코스.`,
+    /* 25 */ `지친 몸에 활력을 줄 ${locationKeyword} 24시 출장 및 스웨디시 마사지. 검증된 관리사의 다채로운 힐링 코스 추천.`,
+    /* 26 */ `${simpleLocation} 출장 방문 홈케어 마사지 가격 및 코스 안내. 24시간 원하는 시간에 맞춰 방문하는 프라이빗 케어.`,
+    /* 27 */ `${locationKeyword} 출장 및 감성 마사지 안심 후불제 추천! 출발 전 예약금을 요구하지 않는 안전한 업체 정보 모음.`,
+    /* 28 */ `${locationKeyword} 25분 신속 방문 출장 및 타이마사지. 뭉친 승모근과 하체 피로를 상쾌하게 풀어드립니다.`,
+    /* 29 */ `${simpleLocation} 최상의 24시 출장 방문 아로마마사지 제휴 안내. 정직한 서비스와 투명한 요금을 확인해보세요.`,
+    /* 30 */ `${locationKeyword} 출장 및 스웨디시 마사지 타이, 아로마 맞춤 케어! 개인 공간에서 편안하게 누리는 힐링 타임.`,
+    /* 31 */ `100% 후불제로 안심할 수 있는 ${locationKeyword} 24시 출장 방문 홈케어 마사지. 빠른 방문과 친절한 서비스 제공.`,
+    /* 32 */ `${simpleLocation} 출장 및 감성 마사지 힐링 테라피 모음. 24시간 언제나 빠르게 이용할 수 있는 수도권 안심 가이드.`,
+    /* 33 */ `${locationKeyword} 출장 방문 타이마사지 전문 제휴업체 정보. 신속한 방문 서비스와 꼼꼼한 전신 이완 프로그램을 확인하세요.`,
+    /* 34 */ `${locationKeyword} 24시 안심 출장 및 아로마마사지 이용 방법. 예약부터 도착까지 100% 후불제로 안전하게 진행됩니다.`,
+    /* 35 */ `${simpleLocation} 출장 방문 스웨디시 마사지 전문 테라피스트 빠른 배치. 프리미엄 오일 및 건식으로 피로를 회복하세요.`,
+    /* 36 */ `${locationKeyword} 24시 출장 및 홈케어 마사지 빠른 방문 보장. 선입금 없는 100% 안심 후불제로 편하게 이용하세요.`,
+    /* 37 */ `${locationKeyword} 출장 방문 감성 마사지 1:1 프라이빗 테라피. 지친 일상 속 깊은 휴식과 릴렉싱을 제공하는 제휴 정보.`,
+    /* 38 */ `${simpleLocation} 25분 내 빠른 출동 출장 및 타이마사지! 전신 근육 긴장 완화 및 안정을 돕는 프리미엄 케어.`,
+    /* 39 */ `무드앤휴에서 엄선한 ${locationKeyword} 24시 출장 방문 아로마마사지 모음. 깔끔하고 정직한 제휴 정보를 확인하세요.`,
+    /* 40 */ `${locationKeyword} 출장 및 스웨디시 마사지 타이 & 오일 정보. 선입금 요구가 전혀 없는 안전한 후불제 매장만 안내합니다.`,
+    /* 41 */ `${simpleLocation} 출장 방문 홈케어 마사지 24시간 예약 지원. 나만의 프라이빗한 장소에서 편안하게 하루 피로를 풀어보세요.`,
+    /* 42 */ `${locationKeyword} 출장 및 감성 마사지 릴렉스 가이드. 투명한 요금 체계와 베테랑 힐러의 깊이 있는 테라피 서비스.`,
+    /* 43 */ `${locationKeyword} 전지역 24시 신속 방문 출장 및 타이마사지. 아로마 테라피로 지친 몸과 마음에 휴식을 선사합니다.`,
+    /* 44 */ `${simpleLocation} 출장 방문 아로마마사지 제휴업체 실시간 가이드. 100% 후불 안전 거래와 깔끔한 서비스 구성 안내.`,
+    /* 45 */ `${locationKeyword} 출장 및 스웨디시 마사지 빠른 예약 안내. 24시간 편한 시간에 맞춰 방문하는 1:1 맞춤 피로해소 코스.`,
+    /* 46 */ `${locationKeyword} 출장 방문 홈케어 마사지 추천 가이드! 선입금 없는 후불제로 마음 편히 이용할 수 있는 바디 테라피.`,
+    /* 47 */ `${simpleLocation} 출장 및 감성 마사지 신속 방문 시스템. 전문 테라피스트가 직접 찾아가 고품격 테라피를 선사합니다.`,
+    /* 48 */ `${locationKeyword} 24시 출장 방문 타이마사지 정리. 코스별 요금 및 1:1 전화 연결 서비스를 제공합니다.`,
+    /* 49 */ `${locationKeyword} 출장 및 아로마마사지 안심 이용 가이드. 100% 후불제 시스템과 정직한 제휴 정보로 신뢰를 드립니다.`,
   ];
 
   const finalTitle = titleVariants[variantIndex];
@@ -143,14 +145,14 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
     title: finalTitle,
     description: finalDescription,
     keywords: [
-      `${locationKeyword} 출장마사지`,
-      `${locationKeyword}출장마사지`,
-      `${simpleLocation} 출장마사지`,
-      `${locationKeyword} 홈케어`,
-      `${locationKeyword} 방문 마사지`,
+      `${locationKeyword} 마사지`,
+      `${locationKeyword} 타이마사지`,
+      `${locationKeyword} 아로마마사지`,
       `${locationKeyword} 스웨디시`,
-      "24시 출장마사지",
-      "후불제 출장마사지",
+      `${locationKeyword} 홈케어`,
+      `${simpleLocation} 마사지`,
+      "24시 마사지",
+      "후불제 마사지",
       "무드앤휴",
     ],
     openGraph: {
@@ -225,8 +227,8 @@ export default async function RegionalDetailPage({ params, searchParams }: PageP
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": `${fullTitle} 출장마사지 & 홈케어 안내 - 무드앤휴`,
-    "description": `${fullTitle} 지역 출장마사지, 방문 바디케어 및 힐링 테라피 제휴업체 정보 제공`,
+    "name": `${fullTitle} 마사지 & 홈케어 안내 - 무드앤휴`,
+    "description": `${fullTitle} 지역 타이, 아로마 마사지 및 방문 바디케어 제휴업체 정보 제공`,
     "url": `https://mood-hue.netlify.app/${region}/${encodeURIComponent(districtName)}${dongName ? `?dong=${encodeURIComponent(dongName)}` : ""}`,
     "telephone": "0507-1280-3344",
     "priceRange": "60,000원 ~ 190,000원",
@@ -292,7 +294,7 @@ export default async function RegionalDetailPage({ params, searchParams }: PageP
         <section className="relative rounded-3xl overflow-hidden border border-amber-500/30 shadow-[0_0_40px_rgba(245,158,11,0.15)]">
           <img
             src="/banner.jpg"
-            alt={`${fullTitle} 출장마사지 및 바디케어 안내`}
+            alt={`${fullTitle} 타이 및 아로마 마사지 안내`}
             className="w-full h-56 md:h-72 object-cover filter brightness-[0.6]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent flex flex-col justify-end p-6 md:p-8">
@@ -300,17 +302,16 @@ export default async function RegionalDetailPage({ params, searchParams }: PageP
               {regionName.toUpperCase()} · LOCAL HEALING GUIDE
             </span>
             <h1 className="text-2xl md:text-4xl font-black text-white drop-shadow-md">
-              {fullTitle} 출장마사지 & 방문 홈케어 안내
+              {fullTitle} 타이·아로마 마사지 안내
             </h1>
             <p className="text-xs md:text-sm text-gray-300 mt-2 max-w-xl leading-relaxed">
-              {fullTitle} 고객님을 위한 24시 출장마사지 가이드입니다. 검증된 테라피 코스와 100% 후불 안심 시스템을 확인해 보세요.
+              {fullTitle} 고객님을 위한 24시 마사지 가이드입니다. 검증된 테라피 코스와 100% 후불 안심 시스템을 확인해 보세요.
             </p>
           </div>
         </section>
 
         <ClientTextMixer locationText={fullTitle} />
 
-        {/* 🌟 제휴업체 5개 카드리스트: ClientShopList 적용 (새로고침 시 실시간 랜덤 셔플) */}
         <section className="space-y-6">
           <div className="text-center">
             <p className="text-xs text-amber-400 font-bold tracking-widest uppercase">RECOMMENDED SHOPS</p>
@@ -334,13 +335,13 @@ export default async function RegionalDetailPage({ params, searchParams }: PageP
               <h4 className="font-bold text-white text-xs">💡 나에게 맞는 테라피 프로그램 선택 기준</h4>
               <ul className="list-disc list-inside space-y-1.5 text-gray-400">
                 <li>
-                  <strong className="text-gray-200">건식 릴렉싱 케어:</strong> 둔근, 하체 근육, 견갑골 주위의 굳은 부위를 눌러 스트레칭 위주로 근육 긴장을 해소합니다.
+                  <strong className="text-gray-200">타이 마사지:</strong> 둔근, 하체 근육, 견갑골 주위의 굳은 부위를 지압과 스트레칭 위주로 근육 긴장을 해소합니다.
                 </li>
                 <li>
-                  <strong className="text-gray-200">아로마 & 스웨디시 케어:</strong> 천연 오일의 유기적인 압을 이용해 림프 순환을 돕고 심신 안정 및 부종 완화에 탁월합니다.
+                  <strong className="text-gray-200">아로마 & 스웨디시 마사지:</strong> 천연 오일의 유기적인 압을 이용해 림프 순환을 돕고 심신 안정 및 부종 완화에 탁월합니다.
                 </li>
                 <li>
-                  <strong className="text-gray-200">프라이빗 홈케어 케어:</strong> 익숙하고 편안한 자신의 개인 공간에서 이동 시간 없이 피로를 완화할 수 있는 장점이 있습니다.
+                  <strong className="text-gray-200">홈케어 테라피:</strong> 익숙하고 편안한 자신의 개인 공간에서 이동 시간 없이 피로를 완화할 수 있는 장점이 있습니다.
                 </li>
               </ul>
             </div>
@@ -369,7 +370,7 @@ export default async function RegionalDetailPage({ params, searchParams }: PageP
             <div className="bg-black/60 p-4 rounded-2xl border border-white/5 text-center">
               <span className="text-xs text-amber-400 font-bold">STEP 3</span>
               <h4 className="font-bold text-white mt-1">코스 선택</h4>
-              <p className="text-xs text-gray-400 mt-1">컨디션에 맞는 프로그램을 선택합니다.</p>
+              <p className="text-xs text-gray-400 mt-1">타이·아로마 등 프로그램을 선택합니다.</p>
             </div>
             <div className="bg-black/60 p-4 rounded-2xl border border-white/5 text-center">
               <span className="text-xs text-amber-400 font-bold">STEP 4</span>

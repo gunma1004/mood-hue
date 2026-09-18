@@ -1,5 +1,4 @@
-"use client";
-
+import { Metadata } from "next";
 import { use } from "react";
 import Link from "next/link";
 
@@ -87,7 +86,7 @@ const shopData: Record<string, {
     image: "/shop5.jpg",
     desc: "선입금 없는 100% 후불제 안심 이용! 수도권 전지역 평균 25분 내 칼같이 도착합니다.",
     courses: [
-      { name: "20대 혼혈 프리미엄 코스", time: "60분", price: "110,000원", desc: "지친 피로를 깔끔하게 해소하는 기본 건식 케어" },
+      { name: "20대 혼혈 프리미엄 코스", time: "60분", price: "110,000원", desc: "지친 피로를 깔끔하게 해소하는 기본 건식 케er" },
       { name: "20대 혼혈 프리미엄 코스", time: "90분", price: "130,000원", desc: "향기로운 아로마 향과 함께하는 부드러운 릴렉싱" },
       { name: "20대 혼혈 프리미엄 코스", time: "120분", price: "150,000원", desc: "향기로운 아로마 향과 함께하는 부드러운 릴렉싱" },
       { name: "한국인 골든 스웨디시 코스", time: "60분", price: "140,000원", desc: "향기로운 아로마 향과 함께하는 부드러운 릴렉싱" },
@@ -96,6 +95,78 @@ const shopData: Record<string, {
     features: ["100% 후불제", "수도권 전지역 빠른 도착", "고객 만족도 최상"]
   }
 };
+
+// 🌟 '출장'과 '마사지'가 절대 붙지 않고 자연스럽게 떨어져 배치되는 1,000+ 조합 메타데이터 생성 함수
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const shopId = resolvedParams.id;
+  const shop = shopData[shopId];
+
+  if (!shop) {
+    return {
+      title: "존재하지 않는 제휴점 - 무드앤휴",
+      description: "올바른 경로로 접근해 주세요.",
+    };
+  }
+
+  const shopNum = parseInt(shopId, 10) || 1;
+
+  const prefixes = [
+    `[무드앤휴 공식]`, `[24시 안심제휴]`, `[추천 제휴점]`, `[수도권 25분 방문]`, `[후불제 보장]`,
+    `[프리미엄 힐링]`, `[베테랑 케어]`, `[공식 인증샵]`, `[스페셜 테라피]`, `[맞춤형 바디케어]`
+  ];
+
+  // '출장' 단어가 포함되되 '마사지'와 떨어지도록 조합하는 중간 연결어/수식어군
+  const middleConnectors = [
+    `출장 및 타이마사지`, `출장 방문 아로마마사지`, `출장 전문 스웨디시`, `출장 홈케어 마사지`, `출장 및 감성 마사지`,
+    `출장 방문 건식릴렉싱`, `출장 전신 오일테라피`, `출장 딥티슈 바디케어`, `출장 체형맞춤 마사지`, `출장 힐링스페셜 코스`
+  ];
+
+  const suffixes = [
+    `가격 및 코스 상세 안내`, `예약 가이드 및 후불제 시스템`, `24시간 신속 방문 서비스`,
+    `제휴업체 실시간 예약`, `전문 테라피스트 힐링 안내`, `만족도 높은 방문 케어 모음`,
+    `지친 피로를 풀어주는 힐링 타임`, `안심 후불제 이용 방법`, `프리미엄 바디케어 가이드`, `공식 제휴 프로모션`
+  ];
+
+  const descStyles = [
+    `선입금 없는 100% 안심 후불제! ${shop.name}에서 제공하는 고품격 출장 및 타이·아로마 마사지 프로그램과 실시간 방문 서비스를 확인해 보세요.`,
+    `수도권 전지역 25분 내 신속 방문. ${shop.desc} 출장 24시간 언제나 부담 없이 이용 가능한 안전한 후불제 마사지 제휴 가이드.`,
+    `지친 일상의 피로를 말끔히 해소하는 프리미엄 출장 방문 테라피. ${shop.badge}을 자랑하는 ${shop.name}의 상세 마사지 코스 및 요금 안내.`,
+    `예약금 요구가 전혀 없는 정직한 100% 후불 시스템! ${shop.location}에서 누리는 맞춤형 출장 및 스웨디시 마사지 정보.`,
+    `전문 힐러진의 세심한 손길로 완성되는 1:1 프라이빗 출장 바디케어. ${shop.name} 24시 상시 예약 및 빠른 방문 마사지 서비스 안내.`
+  ];
+
+  const pIdx = (shopNum * 7) % prefixes.length;
+  const mIdx = (shopNum * 13) % middleConnectors.length;
+  const sIdx = (shopNum * 19) % suffixes.length;
+  const dIdx = (shopNum * 11) % descStyles.length;
+
+  // 타이틀 예: "[무드앤휴 공식] 한국미인홈케어 - 출장 및 타이마사지 | 가격 및 코스 상세 안내" ('출장'과 '마사지'가 붙지 않음)
+  const dynamicTitle = `${prefixes[pIdx]} ${shop.name} - ${middleConnectors[mIdx]} | ${suffixes[sIdx]}`;
+  const dynamicDescription = `${descStyles[dIdx]} (고객센터: ${shop.phone})`;
+
+  return {
+    title: dynamicTitle,
+    description: dynamicDescription,
+    keywords: [
+      shop.name,
+      "출장 마사지",
+      "방문 마사지",
+      "후불제 마사지",
+      "스웨디시",
+      "아로마마사지",
+      "무드앤휴",
+    ],
+    openGraph: {
+      title: dynamicTitle,
+      description: dynamicDescription,
+      url: `https://mood-hue.netlify.app/shop/${shopId}`,
+      siteName: "무드앤휴",
+      locale: "ko_KR",
+      type: "website",
+    },
+  };
+}
 
 export default function ShopDetailPage({ params }: PageProps) {
   const resolvedParams = use(params);
@@ -119,7 +190,6 @@ export default function ShopDetailPage({ params }: PageProps) {
 
   return (
     <div className="bg-[#050505] text-gray-100 min-h-screen flex flex-col font-sans selection:bg-amber-500 selection:text-black pb-24">
-      
       {/* 상단 헤더 */}
       <header className="sticky top-0 z-50 bg-[#050505]/85 backdrop-blur-xl border-b border-amber-500/20 px-4 py-3.5 shadow-[0_4px_20px_rgba(245,158,11,0.1)]">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
@@ -144,7 +214,6 @@ export default function ShopDetailPage({ params }: PageProps) {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8 w-full flex-1 space-y-8">
-        
         {/* 대표 비주얼 카드 */}
         <section className="bg-[#121214] border border-amber-500/30 rounded-3xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
           <div className="relative h-64 md:h-80 w-full overflow-hidden">
@@ -221,7 +290,6 @@ export default function ShopDetailPage({ params }: PageProps) {
             <li>희망하시는 시간 20~30분 전에 미리 예약 문의 주시면 원활한 서비스가 가능합니다.</li>
           </ul>
         </section>
-
       </main>
 
       {/* 하단 고정 전화/문자 예약 바 */}
@@ -241,7 +309,6 @@ export default function ShopDetailPage({ params }: PageProps) {
           </a>
         </div>
       </div>
-
     </div>
   );
 }
